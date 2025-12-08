@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
     phone: {
         type: String,
         required: true
+    },
+    whatsappnumber:{
+        type: String,
+        required:true
     }
 })
 
