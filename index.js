@@ -19,7 +19,7 @@ app.use((req,res,next)=>{
     if(token != null){
         token = token.replace("Bearer ","")
 
-        jwt.verify(token,"your_jwt_secret_key",
+        jwt.verify(token,process.env.JWT_SECRET,
         (err,decoded)=>{
             if(!err){
                 console.log("Decoded JWT:", decoded)
