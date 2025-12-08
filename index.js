@@ -4,6 +4,9 @@ import mongoose from 'mongoose'
 import userRouter from './routes/userRouter.js'
 import productRouter from './routes/productRouter.js'
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+
+dotenv.config() // Load environment variables from .env file
 
 let app = express() 
 
@@ -27,7 +30,7 @@ app.use((req,res,next)=>{
 })
 
 
-let mongoUrl = "mongodb+srv://admin:123@cluster0.pdpjoua.mongodb.net/?appName=Cluster0"
+let mongoUrl = process.env.MONGO_URL
 
 mongoose.connect(mongoUrl)
 
