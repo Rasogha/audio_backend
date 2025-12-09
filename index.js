@@ -5,6 +5,7 @@ import userRouter from './routes/userRouter.js'
 import productRouter from './routes/productRouter.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import reviewRouter from './routes/reviewRouter.js'
 
 dotenv.config() // Load environment variables from .env file
 
@@ -42,7 +43,11 @@ connection.once('open', ()=>{
 
 app.use('/api/users', userRouter)
 app.use('/api/products', productRouter)
+app.use('/api/reviews', reviewRouter)
 
 app.listen(3000,()=>{
     console.log("Server started on port 3000");
 })
+
+//john.doee@example.com StrongPassword123 user
+//john.doeee@example.com StrongPassword1234 admin
