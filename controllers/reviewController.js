@@ -21,20 +21,14 @@ export function addReview(req, res){
     })
 }
 
-export function getReview(req, res){ //user need to see only approved reviews, admin can see all
+export async function getReview(req, res){ //user need to see only approved reviews, admin can see all
     const user = req.user
 
-    if(user == null || user.role !== "admin"){
-        Review.find({isApproved: true}).then((reviews)=>{
-            res.json(reviews)
-        })
-        return
-    }
-
-    if(user.role == "admin"){
-        Review.find().then((reviews)=>{
-            res.json(reviews)
-        })
+    try{
+        const reviews = await Review.find()
+        res.json(reviews)
+    }catch(e){
+        res.status(500).json({error: "An error occurred while fetching reviews."})
     }
 }
 
