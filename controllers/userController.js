@@ -13,9 +13,14 @@ export function registerUser(req, res) {
 
     newUser.save().then(() =>{
         res.json({message: "User registered successfully"})
-    }).catch((error)=>{
-        res.status(500).json({message: error.message})
-    })
+    }).catch((error) => {
+    
+        return res.status().json({ message: "Email already exists" })
+    
+
+    res.status(400).json({ message: error.message })
+})
+
 }
 
 export function loginUser(req, res) {

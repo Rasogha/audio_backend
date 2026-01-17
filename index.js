@@ -11,14 +11,14 @@ import cors from 'cors'
 
 dotenv.config() // Load environment variables from .env file
 
-let app = express() 
+let app = express()
 
 app.use(cors())
 
 app.use(bodyParser.json()) 
 app.use((req,res,next)=>{
-    let token = req.header
-    ("Authorization")
+    
+    let token = req.header("Authorization")
     
     //remove "bearer "
     if(token != null){
