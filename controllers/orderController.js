@@ -73,8 +73,67 @@ export async function createOrder(req, res){
         const newOrder = new Order(orderInfo)
         const result = await newOrder.save()
         res.json({
-            message: "Order placed successfully",
+            message: "Order quotation",
             order: result
+        })
+    }catch(e){
+        res.status(500).json({
+            message: "Error placing order"
+        })
+    }
+}
+
+export async function getQuote(req, res){
+    console.log(req.body)
+    const data = req.body
+    const orderInfo = {
+        orderedItems:[]
+    }
+    let oneDayCost = 0
+    for(let i=0; i<data.orderedItems.length; i++){
+        try{
+            const product = await Product.findOne({key: data.orderedItems[i].key})
+            if(product == null){
+                res.status(400).json({
+                    message: `Product with key ${data.orderedItems[i].key} not found`
+                })
+                return
+            }
+            if(product.availability === false){
+                res.status(400).json({
+                    message: `Product with key ${data.orderedItems[i].key} is not available`
+                })
+                return
+            }
+            orderInfo.orderedItems.push({
+                product: {
+                    key: product.key,
+                    name: product.name,
+                    image: product.image[0],
+                    price: product.price
+                },
+                quantity: data.orderedItems[i].qty
+            })
+
+            oneDayCost += product.price * data.orderedItems[i].qty
+        
+        }catch(e){
+            res.status(500).json({
+                message: "Error processing order"
+            })
+            return
+        }
+    }
+    
+    orderInfo.days = data.days
+    orderInfo.startingDate = data.startingDate
+    orderInfo.endingDate = data.endingDate
+    orderInfo.totalAmount = oneDayCost * data.days
+
+    try{
+        res.json({
+            message: "Order placed successfully",
+            total: orderInfo.totalAmount,
         })
     }catch(e){
         res.status(500).json({
