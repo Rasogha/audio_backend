@@ -17,7 +17,7 @@ const reviewSchema = new mongoose.Schema({ // one email can give only one review
     date:{
         type: Date,
         required: true,
-        default: Date.now()
+        default: Date.now
     },
     profilePicture:{
         type: String,
