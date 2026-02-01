@@ -10,6 +10,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    isBlocked:{
+        type: Boolean,
+        required: true,
+        default:false
+    },
     role:{
         type: String,
         required: true,
@@ -33,8 +38,7 @@ const userSchema = new mongoose.Schema({
     },
     profilePicture: {
         type: String,
-        required: true,
-        default: "https://www.vecteezy.com/free-vector/default-profile-picture"
+        default: null
     }
 })
 

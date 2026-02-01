@@ -1,5 +1,6 @@
 import Order from "../models/order.js";
 import Product from "../models/product.js";
+import { isItAdmin, isItCustomer } from "./userController.js";
 export async function createOrder(req, res){
     const data = req.body
     const orderInfo = {
@@ -139,5 +140,50 @@ export async function getQuote(req, res){
         res.status(500).json({
             message: "Error placing order"
         })
+    }
+}
+
+export async function getOrders(req, res){
+    if(isItCustomer(req)){
+        try{
+            const orders = await Order.find({email: req.user.email})
+            res.json(orders)
+        }catch(e){
+            res.status(500).json({error:"Faild to load orders"})
+        }
+    }else if(isItAdmin(req)){
+        try{
+            const orders = await Order.find()
+            res.json(orders)
+        }catch(e){
+            res.status(500).json({error:"Faild to load orders"})
+        }
+    }else{
+        res.status(403).json({error:"Unauthorized"})
+    }
+}
+
+export async function approveOrRejectOrder(req,res){
+    const orderId = req.params.orderId
+    const status = req.body.status
+
+    if(isItAdmin(req)){
+        const order = await Order.findOne({
+            orderId: orderId
+        })
+        if(order == null){
+            res.status(404).json({error: "Order not found"})
+            return
+        }
+
+        await Order.updateOne({
+            orderId: orderId
+        },{
+            status:status
+        })
+
+        res.json({message:"Order is Approved/Rejected successfully"})
+    }else{
+        res.status(403).json({error:"Unauthorized"})
     }
 }
