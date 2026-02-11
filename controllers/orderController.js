@@ -11,7 +11,7 @@ export async function createOrder(req, res){
         res.status(401).json({
             message: "You must be logged in to place an order"
         })
-        return
+        return 
     }
     orderInfo.email = req.user.email
 
